@@ -1,0 +1,331 @@
+{
+	"info": {
+		"_postman_id": "0e72fa96-bb2b-41c9-bf07-cb429febcb49",
+		"name": "SIP",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38538401",
+		"_collection_link": "https://sip444-1449.postman.co/workspace/24b6aae5-620a-4e55-aa62-379231a3eaae/collection/38538401-0e72fa96-bb2b-41c9-bf07-cb429febcb49?action=share&source=collection_link&creator=38538401"
+	},
+	"item": [
+		{
+			"name": "http://localhost:3000/api/investor/login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\":\"admin@gmail.com\",\r\n    \"password\":\"12345\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/investor/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"investor",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/api/investor/holdings/INV001",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsInJvbGUiOiJpbnZlc3RvciIsImlhdCI6MTc3ODE0NTM0NSwiZXhwIjoxNzc4MTQ1OTQ1fQ.VZ3DZhHNa9E_uDbayd_o83y41fJW4k7G970IXHUbSTk",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/api/investor/holdings/INV001",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"investor",
+						"holdings",
+						"INV001"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/api/investor/INV001",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsInJvbGUiOiJpbnZlc3RvciIsImlhdCI6MTc3ODE0NTM0NSwiZXhwIjoxNzc4MTQ1OTQ1fQ.VZ3DZhHNa9E_uDbayd_o83y41fJW4k7G970IXHUbSTk",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/api/investor/INV001",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"investor",
+						"INV001"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/api/investor/networth/INV001",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsInJvbGUiOiJpbnZlc3RvciIsImlhdCI6MTc3ODE0NTM0NSwiZXhwIjoxNzc4MTQ1OTQ1fQ.VZ3DZhHNa9E_uDbayd_o83y41fJW4k7G970IXHUbSTk",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/api/investor/networth/INV001",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"investor",
+						"networth",
+						"INV001"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/api/fund",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsInJvbGUiOiJpbnZlc3RvciIsImlhdCI6MTc3ODE0NTM0NSwiZXhwIjoxNzc4MTQ1OTQ1fQ.VZ3DZhHNa9E_uDbayd_o83y41fJW4k7G970IXHUbSTk",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/api/fund",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"fund"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/api/fund",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsInJvbGUiOiJpbnZlc3RvciIsImlhdCI6MTc3ODE0NTM0NSwiZXhwIjoxNzc4MTQ1OTQ1fQ.VZ3DZhHNa9E_uDbayd_o83y41fJW4k7G970IXHUbSTk",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"fund_id\":\"FND100\",\r\n    \"fund_name\":\"Nippon Growth Fund\",\r\n    \"amc_name\":\"Nippon AMC\",\r\n    \"fund_type\":\"Equity\",\r\n    \"category\":\"Large Cap\",\r\n    \"nav_value\":55,\r\n    \"nav_date\":\"2026-05-07\",\r\n    \"risk_level\":\"High\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/fund",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"fund"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/api/fund/FND001/nav",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsInJvbGUiOiJpbnZlc3RvciIsImlhdCI6MTc3ODE0NTM0NSwiZXhwIjoxNzc4MTQ1OTQ1fQ.VZ3DZhHNa9E_uDbayd_o83y41fJW4k7G970IXHUbSTk",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nav_value\":80\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/fund/FND001/nav",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"fund",
+						"FND001",
+						"nav"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/api/sip",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsInJvbGUiOiJpbnZlc3RvciIsImlhdCI6MTc3ODE0NTM0NSwiZXhwIjoxNzc4MTQ1OTQ1fQ.VZ3DZhHNa9E_uDbayd_o83y41fJW4k7G970IXHUbSTk",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"sip_id\":\"SIP100\",\r\n    \"investor_id\":\"INV001\",\r\n    \"fund_id\":\"FND001\",\r\n    \"sip_amount\":5000,\r\n    \"sip_date\":5,\r\n    \"frequency\":\"Monthly\",\r\n    \"start_date\":\"2026-05-01\",\r\n    \"sip_status\":\"Active\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/sip",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"sip"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/api/sip/SIP100",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/sip/SIP100",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"sip",
+						"SIP100"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/api/sip/process/SIP100",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"transaction_id\":\"TXN100\",\r\n    \"sip_id\":\"SIP100\",\r\n    \"investor_id\":\"INV001\",\r\n    \"fund_id\":\"FND001\",\r\n    \"transaction_amount\":5000,\r\n    \"nav_used\":55,\r\n    \"units_allocated\":90,\r\n    \"transaction_date\":\"2026-05-07\",\r\n    \"transaction_status\":\"Success\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/sip/process/SIP100",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"sip",
+						"process",
+						"SIP100"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/api/sip/transactions/SIP100",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/sip/transactions/SIP100",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"sip",
+						"transactions",
+						"SIP100"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
