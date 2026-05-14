@@ -2,8 +2,8 @@ const db = require("../utility/dbManager");
 
 const users = [
     {
-        email: "ram@gmail.com",
-        password: "password123",
+        email: "vivek@gmail.com",
+        password: "vivek123",
         loggedIn: false
     }
 ];
@@ -32,4 +32,4 @@ const logoutUser = () => {
 }
 
 
-module.exports = {loginUser, logoutUser};
+module.exports = {loginUser, logoutUser};   

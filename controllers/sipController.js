@@ -1,5 +1,7 @@
 const db = require("../utility/dbManager");
 
+
+// CREATE SIP
 const createSIP = (req, res) => {
 
     const {
@@ -39,19 +41,21 @@ const createSIP = (req, res) => {
             start_date,
             sip_status
         ],
-        function(err) {
 
-            if (err) {
+        function(err){
+
+            if(err){
+
                 return res.status(500).json({
                     success: false,
-                    message: "Database error",
+                    message: "Database Error",
                     error: err.message
                 });
             }
 
             return res.status(201).json({
                 success: true,
-                message: "SIP registered successfully"
+                message: "SIP Created Successfully"
             });
 
         }
@@ -60,36 +64,40 @@ const createSIP = (req, res) => {
 };
 
 
-const getSIPById = (req, res) => {
 
-    const { sipId } = req.params;
+// GET ALL SIPS
+const getAllSIPs = (req, res) => {
 
     const query = `
-        SELECT *
-        FROM sip_registration
-        WHERE sip_id = ?
+        SELECT
+            sr.*,
+            mf.fund_name,
+            mf.amc_name,
+            mf.nav_value,
+            mf.risk_level
+
+        FROM sip_registration sr
+
+        JOIN mutual_fund mf
+        ON sr.fund_id = mf.fund_id
+
+        ORDER BY sr.start_date DESC
     `;
 
-    db.get(query, [sipId], (err, row) => {
+    db.all(query, [], (err, rows) => {
 
-        if (err) {
+        if(err){
+
             return res.status(500).json({
                 success: false,
-                message: "Database error",
+                message: "Database Error",
                 error: err.message
-            });
-        }
-
-        if (!row) {
-            return res.status(404).json({
-                success: false,
-                message: "SIP not found"
             });
         }
 
         return res.status(200).json({
             success: true,
-            sip: row
+            sips: rows
         });
 
     });
@@ -98,12 +106,90 @@ const getSIPById = (req, res) => {
 
 
 
+// GET SIP DETAILS + TRANSACTIONS
+const getSIPWithTransactions = (req, res) => {
+
+    const { sipId } = req.params;
+
+    const sipQuery = `
+        SELECT
+            sr.*,
+            mf.fund_name,
+            mf.amc_name,
+            mf.nav_value,
+            mf.risk_level
+
+        FROM sip_registration sr
+
+        JOIN mutual_fund mf
+        ON sr.fund_id = mf.fund_id
+
+        WHERE sr.sip_id = ?
+    `;
+
+    db.get(sipQuery, [sipId], (err, sip) => {
+
+        if(err){
+
+            return res.status(500).json({
+                success: false,
+                message: "Database Error",
+                error: err.message
+            });
+        }
+
+        if(!sip){
+
+            return res.status(404).json({
+                success: false,
+                message: "SIP Not Found"
+            });
+        }
+
+        const transactionQuery = `
+            SELECT *
+            FROM investment_transaction
+            WHERE sip_id = ?
+            ORDER BY transaction_date DESC
+        `;
+
+        db.all(
+            transactionQuery,
+            [sipId],
+
+            (err, transactions) => {
+
+                if(err){
+
+                    return res.status(500).json({
+                        success: false,
+                        message: "Database Error",
+                        error: err.message
+                    });
+                }
+
+                return res.status(200).json({
+                    success: true,
+                    sip,
+                    transactions
+                });
+
+            }
+        );
+
+    });
+
+};
+
+
+
+// PROCESS SIP
 const processSIP = (req, res) => {
 
     const { sipId } = req.params;
 
-    const getSIPQuery = `
-        SELECT 
+    const query = `
+        SELECT
             sr.*,
             mf.nav_value
 
@@ -115,30 +201,32 @@ const processSIP = (req, res) => {
         WHERE sr.sip_id = ?
     `;
 
-    db.get(getSIPQuery, [sipId], (err, sip) => {
+    db.get(query, [sipId], (err, sip) => {
 
-        if (err) {
+        if(err){
+
             return res.status(500).json({
                 success: false,
-                message: "Database error",
+                message: "Database Error",
                 error: err.message
             });
         }
 
-        if (!sip) {
+        if(!sip){
+
             return res.status(404).json({
                 success: false,
-                message: "SIP not found"
+                message: "SIP Not Found"
             });
         }
 
         const unitsAllocated =
-            sip.sip_amount / sip.nav_value;
+        sip.sip_amount / sip.nav_value;
 
         const transactionId =
-            "TXN" + Date.now();
+        "TXN" + Date.now();
 
-        const insertTransactionQuery = `
+        const insertQuery = `
             INSERT INTO investment_transaction (
                 transaction_id,
                 sip_id,
@@ -154,7 +242,7 @@ const processSIP = (req, res) => {
         `;
 
         db.run(
-            insertTransactionQuery,
+            insertQuery,
             [
                 transactionId,
                 sip.sip_id,
@@ -165,21 +253,21 @@ const processSIP = (req, res) => {
                 unitsAllocated,
                 "Success"
             ],
-            function(err) {
 
-                if (err) {
+            function(err){
+
+                if(err){
+
                     return res.status(500).json({
                         success: false,
-                        message: "Transaction failed",
+                        message: "Transaction Failed",
                         error: err.message
                     });
                 }
 
                 return res.status(201).json({
                     success: true,
-                    message: "SIP processed successfully",
-                    transaction_id: transactionId,
-                    units_allocated: unitsAllocated
+                    message: "SIP Processed Successfully"
                 });
 
             }
@@ -190,33 +278,10 @@ const processSIP = (req, res) => {
 };
 
 
-const getSIPTransactions = (req, res) => {
 
-    const { sipId } = req.params;
-
-    const query = `
-        SELECT *
-        FROM investment_transaction
-        WHERE sip_id = ?
-    `;
-
-    db.all(query, [sipId], (err, rows) => {
-
-        if (err) {
-            return res.status(500).json({
-                success: false,
-                message: "Database error",
-                error: err.message
-            });
-        }
-
-        return res.status(200).json({
-            success: true,
-            transactions: rows
-        });
-
-    });
-
+module.exports = {
+    createSIP,
+    getAllSIPs,
+    getSIPWithTransactions,
+    processSIP
 };
-
-module.exports = { createSIP, getSIPById, processSIP, getSIPTransactions };

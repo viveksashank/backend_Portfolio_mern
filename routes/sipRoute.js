@@ -2,12 +2,48 @@ const express = require("express");
 
 const router = express.Router();
 
-const { createSIP, getSIPById, processSIP,  getSIPTransactions } = require("../controllers/sipController");
-const { verifyJWT } = require("../utility/authManager");
+const {
+    createSIP,
+    getAllSIPs,
+    getSIPWithTransactions,
+    processSIP
+} = require("../controllers/sipController");
 
-router.post( "/", verifyJWT, createSIP );
-router.get("/:sipId",verifyJWT, getSIPById );
-router.post( "/:sipId/process", verifyJWT, processSIP );
-router.get( "/:sipId/transactions", verifyJWT, getSIPTransactions );
+const {
+    verifyJWT
+} = require("../utility/authManager");
+
+
+
+router.post(
+    "/",
+    verifyJWT,
+    createSIP
+);
+
+
+
+router.get(
+    "/",
+    verifyJWT,
+    getAllSIPs
+);
+
+
+
+router.get(
+    "/:sipId/details",
+    verifyJWT,
+    getSIPWithTransactions
+);
+
+
+
+router.post(
+    "/:sipId/process",
+    verifyJWT,
+    processSIP
+);
+
 
 module.exports = router;

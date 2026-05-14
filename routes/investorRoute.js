@@ -1,14 +1,58 @@
 const express = require("express");
-const { login, logout, getInvestorById, getInvestorHoldings, getInvestorNetWorth } = require("../controllers/investorController");
-const { verifyJWT } = require("../utility/authManager");
+const investorrouter = express.Router();
 
-const router = express.Router();
+const {
+  login,
+  logout,
+  getInvestorById,
+  getInvestorHoldings,
+  getInvestorNetWorth,
+  getInvestorTransactions,
+  getInvestorSips
+} = require("../controllers/investorController");
 
-router.post("/login", login);
-router.post("/logout", logout);
+const {
+  verifyJWT
+} = require("../utility/authManager");
 
-router.get("/:investorId", verifyJWT, getInvestorById);
-router.get("/:investorId/holdings", verifyJWT, getInvestorHoldings);
-router.get("/:investorId/networth", verifyJWT, getInvestorNetWorth);
+investorrouter.post(
+  "/login",
+  login
+);
 
-module.exports = router;
+investorrouter.post(
+  "/logout",
+  logout
+);
+
+investorrouter.get(
+  "/:investorId",
+  verifyJWT,
+  getInvestorById
+);
+
+investorrouter.get(
+  "/holdings/:investorId",
+  verifyJWT,
+  getInvestorHoldings
+);
+
+investorrouter.get(
+  "/networth/:investorId",
+  verifyJWT,
+  getInvestorNetWorth
+);
+
+investorrouter.get(
+  "/transactions/:investorId",
+  verifyJWT,
+  getInvestorTransactions
+);
+
+investorrouter.get(
+  "/sips/:investorId",
+  verifyJWT,
+  getInvestorSips
+);
+
+module.exports = investorrouter;
