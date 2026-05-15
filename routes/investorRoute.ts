@@ -1,19 +1,18 @@
-const express = require("express");
-const investorrouter = express.Router();
+import express, { Router } from "express";
 
-const {
+import {
   login,
   logout,
   getInvestorById,
   getInvestorHoldings,
   getInvestorNetWorth,
   getInvestorTransactions,
-  getInvestorSips
-} = require("../controllers/investorController");
+  getInvestorSips,
+} from "../controllers/investorController";
 
-const {
-  verifyJWT
-} = require("../utility/authManager");
+import { verifyJWT } from "../utility/authManager";
+
+const investorrouter: Router = express.Router();
 
 investorrouter.post(
   "/login",
@@ -55,4 +54,4 @@ investorrouter.get(
   getInvestorSips
 );
 
-module.exports = investorrouter;
+export default investorrouter;

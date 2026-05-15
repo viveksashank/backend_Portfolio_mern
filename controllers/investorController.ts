@@ -1,21 +1,19 @@
-const { loginUser, logoutUser } = require("../models/sip");
+import { Request, Response } from "express";
+import { loginUser, logoutUser } from "../models/sip";
+import { signJWT } from "../utility/authManager";
+import {db} from "../utility/dbManager";
 
-const { signJWT } = require("../utility/authManager");
-
-const db = require("../utility/dbManager");
-
-
-// LOGIN
-const login = (req, res) => {
+export function login(req: Request, res: Response): void {
   const { email, password } = req.body;
 
-  const user = loginUser(email, password);
+  const user: any = loginUser(email, password);
 
   if (!user) {
-    return res.status(401).json({
+    res.status(401).json({
       success: false,
       message: "Invalid Credentials",
     });
+    return;
   }
 
   const token = signJWT({
@@ -24,24 +22,23 @@ const login = (req, res) => {
     role: user.role,
   });
 
-  return res.status(200).json({
+  res.status(200).json({
     success: true,
-    token: token,
+    token,
   });
-};
+}
 
-
-// LOGOUT
-const logout = (req, res) => {
-  return res.status(200).json({
+export function logout(req: Request, res: Response): void {
+  res.status(200).json({
     success: true,
     message: "Logout Successful",
   });
-};
+}
 
-
-// GET INVESTOR
-const getInvestorById = (req, res) => {
+export function getInvestorById(
+  req: Request,
+  res: Response
+): void {
   const { investorId } = req.params;
 
   const query = `
@@ -50,120 +47,111 @@ const getInvestorById = (req, res) => {
     WHERE investor_id = ?
   `;
 
-  db.get(query, [investorId], (err, row) => {
+  db.get(query, [investorId], (err: Error | null, row: any) => {
     if (err) {
-      return res.status(500).json({
+      res.status(500).json({
         success: false,
         message: "Database Error",
       });
+      return;
     }
 
     if (!row) {
-      return res.status(404).json({
+      res.status(404).json({
         success: false,
         message: "Investor Not Found",
       });
+      return;
     }
 
-    return res.status(200).json({
+    res.status(200).json({
       success: true,
       data: row,
     });
   });
-};
+}
 
-
-// HOLDINGS
-const getInvestorHoldings = (req, res) => {
+export function getInvestorHoldings(
+  req: Request,
+  res: Response
+): void {
   const { investorId } = req.params;
 
   const query = `
     SELECT
       mf.fund_name,
-
-      SUM(it.units_allocated)
-      AS total_units,
-
-      mf.nav_value
-      AS current_nav,
-
+      SUM(it.units_allocated) AS total_units,
+      mf.nav_value AS current_nav,
       ROUND(
-        SUM(it.units_allocated)
-        * mf.nav_value,
+        SUM(it.units_allocated) * mf.nav_value,
         2
       ) AS current_value
-
     FROM investment_transaction it
-
     JOIN mutual_fund mf
     ON it.fund_id = mf.fund_id
-
     WHERE it.investor_id = ?
-
     AND it.transaction_status = 'Success'
-
     GROUP BY it.fund_id
   `;
 
-  db.all(query, [investorId], (err, rows) => {
+  db.all(query, [investorId], (err: Error | null, rows: any[]) => {
     if (err) {
-      return res.status(500).json({
+      res.status(500).json({
         success: false,
         message: "Database Error",
       });
+      return;
     }
 
-    return res.status(200).json({
+    res.status(200).json({
       success: true,
       holdings: rows,
     });
   });
-};
+}
 
-
-// NET WORTH
-const getInvestorNetWorth = (req, res) => {
+export function getInvestorNetWorth(
+  req: Request,
+  res: Response
+): void {
   const { investorId } = req.params;
 
   const query = `
     SELECT
       ROUND(
         SUM(
-          it.units_allocated
-          * mf.nav_value
+          it.units_allocated * mf.nav_value
         ),
         2
       ) AS net_worth
-
     FROM investment_transaction it
-
     JOIN mutual_fund mf
     ON it.fund_id = mf.fund_id
-
     WHERE it.investor_id = ?
-
     AND it.transaction_status = 'Success'
   `;
 
-  db.get(query, [investorId], (err, row) => {
+  db.get(query, [investorId], (err: Error | null, row: any) => {
     if (err) {
-      return res.status(500).json({
+      res.status(500).json({
         success: false,
         message: "Database Error",
       });
+      return;
     }
 
-    return res.status(200).json({
+    res.status(200).json({
       success: true,
       investor_id: investorId,
-      net_worth: row.net_worth || 0,
+      net_worth: row?.net_worth || 0,
     });
   });
-};
+}
 
-
-// TRANSACTIONS
-const getInvestorTransactions = (req, res) => {
+export function getInvestorTransactions(
+  req: Request,
+  res: Response
+): void {
   const { investorId } = req.params;
 
   const query = `
@@ -172,32 +160,31 @@ const getInvestorTransactions = (req, res) => {
       transaction_amount,
       transaction_status,
       transaction_date
-
     FROM investment_transaction
-
     WHERE investor_id = ?
-
     ORDER BY transaction_date DESC
   `;
 
-  db.all(query, [investorId], (err, rows) => {
+  db.all(query, [investorId], (err: Error | null, rows: any[]) => {
     if (err) {
-      return res.status(500).json({
+      res.status(500).json({
         success: false,
         message: "Database Error",
       });
+      return;
     }
 
-    return res.status(200).json({
+    res.status(200).json({
       success: true,
       transactions: rows,
     });
   });
-};
+}
 
-
-// SIPS
-const getInvestorSips = (req, res) => {
+export function getInvestorSips(
+  req: Request,
+  res: Response
+): void {
   const { investorId } = req.params;
 
   const query = `
@@ -206,39 +193,25 @@ const getInvestorSips = (req, res) => {
       sr.sip_amount,
       sr.frequency,
       sr.sip_status,
-
       mf.fund_name
-
     FROM sip_registration sr
-
     JOIN mutual_fund mf
     ON sr.fund_id = mf.fund_id
-
     WHERE sr.investor_id = ?
   `;
 
-  db.all(query, [investorId], (err, rows) => {
+  db.all(query, [investorId], (err: Error | null, rows: any[]) => {
     if (err) {
-      return res.status(500).json({
+      res.status(500).json({
         success: false,
         message: "Database Error",
       });
+      return;
     }
 
-    return res.status(200).json({
+    res.status(200).json({
       success: true,
       sips: rows,
     });
   });
-};
-
-
-module.exports = {
-  login,
-  logout,
-  getInvestorById,
-  getInvestorHoldings,
-  getInvestorNetWorth,
-  getInvestorTransactions,
-  getInvestorSips,
-};
+}
